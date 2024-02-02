@@ -1,0 +1,126 @@
+@startuml WeatherApp
+
+class fi.tuni.prog3.weatherapp.Favourites {
+	{method} +addFavourite ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : void
+	{method} +checkIfNameExists ( paramString1 : String ) : boolean
+	{method} +readFromFile ( paramString1 : String ) : void
+	{method} +removeByName ( paramString1 : String ) : void
+	{method} +removeFavourite ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : void
+	{method} +writeToFile ( paramString1 : String ) : void
+}
+
+
+class fi.tuni.prog3.weatherapp.Location {
+	{field} -countryCode : String
+	{field} +name : String
+	{field} -x : double
+	{field} -y : double
+	{method} +distanceTo ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : double
+	{method} +setCoordinates ( paramdouble1 : double , paramdouble2 : double ) : void
+	{method} +toString () : String
+}
+
+
+class fi.tuni.prog3.weatherapp.Weather {
+	{field} +airPressure : int
+	{field} +cloudinessPercent : int
+	{field} +humidityPercent : int
+	{field} +maxTemperature : double
+	{field} +minTemperature : double
+	{field} +probabilityOfPrecipitation : double
+	{field} +rainAmount : double
+	{field} +snowAmount : double
+	{field} +temperature : double
+	{field} -time : java.time.LocalDateTime
+	{field} +visibility : int
+	{field} +windSpeed : double
+	{method}  {static} +fromCelsiusToFarenheit ( paramdouble1 : double ) : double
+	{method}  {static} +fromCelsiusToKelvin ( paramdouble1 : double ) : double
+	{method}  {static} +fromFahrenheitToCelcius ( paramdouble1 : double ) : double
+	{method}  {static} +fromHectoPascalsToINHG ( paramdouble1 : double ) : double
+	{method}  {static} +fromKelvinToCelsius ( paramdouble1 : double ) : double
+	{method}  {static} +fromMPSoMPH ( paramdouble1 : double ) : double
+	{method}  {static} +fromMilliMeterToInch ( paramdouble1 : double ) : double
+	{method}  {static} +fromPrecipitationAmountToName ( paramdouble1 : double ) : String
+	{method}  {static} +fromWindSpeedToName ( paramint1 : int ) : String
+}
+
+
+class fi.tuni.prog3.weatherapp.WeatherAPIReader {
+	{field} ~FORECAST_CALL_LIMIT : int
+	{field} {static} ~ILLEGAL_CHARACTERS : [C
+	{field} ~LOCATION_CALL_LIMIT : int
+	{field} ~apiKey : String
+	{field} ~client : java.net.http.HttpClient
+	{method}  {static} -epochToTime ( paramlong1 : long ) : java.time.LocalDateTime
+	{method} +getDailyForecast ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method} +getHourlyWeather ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method}  {static} -isInvalidInput ( paramString1 : String ) : boolean
+	{method}  {static} -isStatusCodeOk ( paramint1 : int ) : boolean
+	{method} +lookUpLocation ( paramString1 : String ) : java.util.List
+	{method}  {static} -parseDailyForecast ( paramString1 : String , paramLocation2 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method}  {static} -parseHourlyWeatherForecast ( paramString1 : String , paramLocation2 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method}  {static} -parseLocationJson ( paramString1 : String ) : java.util.List
+}
+
+
+class fi.tuni.prog3.weatherapp.WeatherApp {
+	{field} {static} -API_KEY : String
+	{field} {static} -DAILY_FORECAST_LENGTH : int
+	{field} {static} -HOURLY_FORECAST_LENGHT : int
+	{field} {static} -LOCATION_FILE_NAME : String
+	{field} {static} -SEARCH_HISTORY_FILE_NAME : String
+	{field} {static} -WINDOW_WIDTH : int
+	{field} -isMetric : boolean
+	{field} {static} -scene : javafx.scene.Scene
+	{method} -initialize () : java.util.List
+	{method}  {static} +isDay ( paramint1 : int ) : boolean
+	{method} -lambda$start$0 ( paramTextField1 : javafx.scene.control.TextField , paramObservableList2 : javafx.collections.ObservableList , paramComboBox3 : javafx.scene.control.ComboBox , paramActionEvent4 : javafx.event.ActionEvent ) : void
+	{method} -lambda$start$1 ( paramComboBox1 : javafx.scene.control.ComboBox , paramActionEvent2 : javafx.event.ActionEvent ) : void
+	{method} -lambda$start$2 ( paramComboBox1 : javafx.scene.control.ComboBox , paramActionEvent2 : javafx.event.ActionEvent ) : void
+	{method} -lambda$start$3 ( paramButton1 : javafx.scene.control.Button , paramActionEvent2 : javafx.event.ActionEvent ) : void
+	{method} -lambda$start$4 ( paramActionEvent1 : javafx.event.ActionEvent ) : void
+	{method}  {static} -lambda$start$5 ( paramComboBox1 : javafx.scene.control.ComboBox , paramActionEvent2 : javafx.event.ActionEvent ) : void
+	{method}  {static} +main ( paramString;1 : [Ljava.lang.String; ) : void
+	{method} -searchLocation ( paramString1 : String ) : boolean
+	{method}  {static} +selectCorrectImage ( paramWeather1 : fi.tuni.prog3.weatherapp.Weather , paramboolean2 : boolean ) : String
+	{method} +start ( paramStage1 : javafx.stage.Stage ) : void
+	{method} +stop () : void
+	{method} -updateComboBox () : void
+	{method} -updateFavourite () : void
+	{method} -updateGUIValues () : void
+	{method} -updateWeather () : void
+}
+
+
+class fi.tuni.prog3.weatherapp.WeatherAppException {
+}
+
+
+interface fi.tuni.prog3.weatherapp.iAPI {
+	{method}  {abstract} +getDailyForecast ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method}  {abstract} +getHourlyWeather ( paramLocation1 : fi.tuni.prog3.weatherapp.Location ) : java.util.List
+	{method}  {abstract} +lookUpLocation ( paramString1 : String ) : java.util.List
+}
+
+
+interface fi.tuni.prog3.weatherapp.iReadAndWriteToFile {
+	{method}  {abstract} +readFromFile ( paramString1 : String ) : void
+	{method}  {abstract} +writeToFile ( paramString1 : String ) : void
+}
+
+
+
+
+fi.tuni.prog3.weatherapp.Favourites "1" o-- "0..*"  fi.tuni.prog3.weatherapp.Location : favourites
+fi.tuni.prog3.weatherapp.Favourites -->  fi.tuni.prog3.weatherapp.Location : currentLocation
+fi.tuni.prog3.weatherapp.Favourites ..|>  fi.tuni.prog3.weatherapp.iReadAndWriteToFile
+fi.tuni.prog3.weatherapp.Weather -->  fi.tuni.prog3.weatherapp.Location : location
+fi.tuni.prog3.weatherapp.WeatherAPIReader ..|>  fi.tuni.prog3.weatherapp.iAPI
+fi.tuni.prog3.weatherapp.WeatherApp "1" o-- "0..*"  fi.tuni.prog3.weatherapp.Weather : dailyWeather
+fi.tuni.prog3.weatherapp.WeatherApp "1" o-- "0..*"  fi.tuni.prog3.weatherapp.Weather : hourlyWeather
+fi.tuni.prog3.weatherapp.WeatherApp -->  fi.tuni.prog3.weatherapp.Favourites : favourites
+fi.tuni.prog3.weatherapp.WeatherApp -->  fi.tuni.prog3.weatherapp.WeatherAPIReader : api
+
+
+@enduml
